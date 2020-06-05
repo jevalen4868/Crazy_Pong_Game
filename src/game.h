@@ -9,7 +9,7 @@
 
 class Game {
 public:
-    Game();
+    Game(const size_t screenWidth, const size_t screenHeight, const size_t msPerFrame);
     ~Game();
     // Runs the game loop until the game is over
     void RunLoop();
@@ -21,8 +21,9 @@ private:
 
     // Window created by SDL
     SDL_Window* _gameWindow;
+    SDL_Renderer *_gameRenderer;
     // Game should continue to run
-    bool _running;
+    bool _running {true};
 };
 
 
