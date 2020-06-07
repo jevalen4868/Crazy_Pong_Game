@@ -10,8 +10,18 @@
 class Ball : public GameObject {
 
 public:
-    Ball(float x, float y);
+    Ball(float x, float y, float velX, float velY);
 
+private:
+    float _velX, _velY;
+
+public:
+    void setVelX(float velX);
+    void setVelY(float velY);
+
+public:
+    float getVelX() const;
+    float getVelY() const;
 };
 
 

@@ -7,3 +7,9 @@
 Paddle::Paddle(float x, float y) : GameObject{x, y} {
 
 }
+int Paddle::getDirection() const {
+    return direction;
+}
+void Paddle::setDirection(int direction) {
+    Paddle::direction = direction;
+}

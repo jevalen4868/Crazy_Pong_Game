@@ -9,12 +9,17 @@ class GameObject {
 public:
     GameObject(float x, float y);
     static constexpr int thickness{15};
-    float getX() { return _x; }
-    float getY() { return _y; }
-    void setX(float x) { _x = x; }
-    void setY(float y) { _y = y; }
+
 private:
     float _x, _y;
+
+public:
+    void setX(float x);
+    void setY(float y);
+
+public:
+    float getX() const;
+    float getY() const;
 };
 
 

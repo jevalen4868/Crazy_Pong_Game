@@ -17,8 +17,8 @@ public:
     void RunLoop();
 private:
     // Helper functions for the game loop
-    void ProcessInput(const float deltaTime);
-    void UpdateGame();
+    void ProcessInput(const float &deltaTime);
+    void UpdateGame(const float &deltaTime);
     void GenerateOutput();
 
     // Window created by SDL

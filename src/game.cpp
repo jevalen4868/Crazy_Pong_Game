@@ -2,14 +2,14 @@
 // Created by jeremyvalenzuela on 6/4/20.
 //
 
-#include <iostream>
 #include "game.h"
+#include <cmath>
 
 Game::Game(const size_t screenWidth, const size_t screenHeight, const Uint32 msPerFrame)
     : _screenHeight{screenHeight}, _screenWidth{screenWidth}, _msPerFrame{msPerFrame},
       _leftPaddle(0, screenHeight / 2),
       _rightPaddle(screenWidth, screenHeight / 2),
-      _ball(screenWidth / 2, screenHeight / 2) {
+      _ball(screenWidth / 2, screenHeight / 2, -200.0f, 235.0f) {
     int sdlResult{SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)};
     if (sdlResult != 0) {
         SDL_Log("Unable to init SDL: %s", SDL_GetError());
@@ -49,12 +49,12 @@ void Game::RunLoop() {
         frameStart = SDL_GetTicks();
 
         ProcessInput(deltaTime);
-        UpdateGame();
+        UpdateGame(deltaTime);
         GenerateOutput();
     }
 }
 
-void Game::ProcessInput(const float deltaTime) {
+void Game::ProcessInput(const float &deltaTime) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
@@ -70,28 +70,78 @@ void Game::ProcessInput(const float deltaTime) {
     }
 
     // Determine direction.
-    int leftPaddleDir{0};
+    _leftPaddle.setDirection(0);
     if (state[SDL_SCANCODE_W]) {
-        leftPaddleDir -= 1;
+        _leftPaddle.setDirection(-1);
     }
     if (state[SDL_SCANCODE_S]) {
-        leftPaddleDir += 1;
+        _leftPaddle.setDirection(1);
     }
-    // Now execute direction
-    if (leftPaddleDir != 0) {
-        float newY = _leftPaddle.getY() + (leftPaddleDir * 300.0f * deltaTime);
-        _leftPaddle.setY(newY);
-        // Make sure the paddle doesn't move off screen.
-        if(_leftPaddle.getY() < (Paddle::height / 2.0f + GameObject::thickness)) {
-            _leftPaddle.setY(Paddle::height / 2.0f + GameObject::thickness);
-        }
-        else if(_leftPaddle.getY() > (_screenHeight - Paddle::height / 2.0f - GameObject::thickness)) {
-            _leftPaddle.setY(_screenHeight - Paddle::height / 2.0f - GameObject::thickness);
-        }
+
+    _rightPaddle.setDirection(0);
+    if (state[SDL_SCANCODE_UP]) {
+        _rightPaddle.setDirection(-1);
+    }
+    if (state[SDL_SCANCODE_DOWN]) {
+        _rightPaddle.setDirection(1);
     }
 }
 
-void Game::UpdateGame() {
+void Game::UpdateGame(const float &deltaTime) {
+
+    // Now execute direction
+    if (_leftPaddle.getDirection() != 0) {
+        float newY = _leftPaddle.getY() + (_leftPaddle.getDirection() * 300.0f * deltaTime);
+        _leftPaddle.setY(newY);
+        // Make sure the paddle doesn't move off screen.
+        if (_leftPaddle.getY() < (Paddle::height / 2.0f + GameObject::thickness)) {
+            _leftPaddle.setY(Paddle::height / 2.0f + GameObject::thickness);
+        } else if (_leftPaddle.getY() > (_screenHeight - Paddle::height / 2.0f - GameObject::thickness)) {
+            _leftPaddle.setY(_screenHeight - Paddle::height / 2.0f - GameObject::thickness);
+        }
+    }
+
+    // Now execute direction
+    if (_rightPaddle.getDirection() != 0) {
+        float newY = _rightPaddle.getY() + (_rightPaddle.getDirection() * 300.0f * deltaTime);
+        _rightPaddle.setY(newY);
+        // Make sure the paddle doesn't move off screen.
+        if (_rightPaddle.getY() < (Paddle::height / 2.0f + GameObject::thickness)) {
+            _rightPaddle.setY(Paddle::height / 2.0f + GameObject::thickness);
+        } else if (_rightPaddle.getY() > (_screenHeight - Paddle::height / 2.0f - GameObject::thickness)) {
+            _rightPaddle.setY(_screenHeight - Paddle::height / 2.0f - GameObject::thickness);
+        }
+    }
+
+    // These if's could be combined but this is relatively cleaner.
+    if (_ball.getY() <= GameObject::thickness && _ball.getVelY() < 0.0f) {
+        _ball.setVelY(_ball.getVelY() * -1);
+    } else if (_ball.getY() >= _screenHeight - GameObject::thickness && _ball.getVelY() > 0.0f) {
+        _ball.setVelY(_ball.getVelY() * -1);
+    }
+
+    // Determine if paddle has hit the ball.
+    const float leftPaddleBallDiff = std::abs(_ball.getY() - _leftPaddle.getY());
+    const float rightPaddleBallDiff = std::abs(_ball.getY() - _rightPaddle.getY());
+    //SDL_Log("ball parameters: leftPaddleBallDiff=%f,ballX=%f,ballY=%f", leftPaddleBallDiff, _ball.getX(), _ball.getY());
+
+    if (// our y-difference is small enough
+            leftPaddleBallDiff <= Paddle::height / 2.0f &&
+            _ball.getX() <= (GameObject::thickness * 2) && _ball.getX() >= GameObject::thickness &&
+            // ball is moving left
+            _ball.getVelX() < 0.0f) {
+        _ball.setVelX(_ball.getVelX() * -1.1f);
+    }
+    else if (// our y-difference is small enough
+            rightPaddleBallDiff <= Paddle::height / 2.0f &&
+            _ball.getX() <= _screenWidth - GameObject::thickness && _ball.getX() >= _screenWidth - (GameObject::thickness * 2) &&
+            // ball is moving right
+            _ball.getVelX() > 0.0f) {
+        _ball.setVelX(_ball.getVelX() * -1.1f );
+    }
+
+    _ball.setX(_ball.getX() + _ball.getVelX() * deltaTime);
+    _ball.setY(_ball.getY() + _ball.getVelY() * deltaTime);
 }
 
 void Game::GenerateOutput() {
