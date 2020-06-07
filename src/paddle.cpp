@@ -3,3 +3,7 @@
 //
 
 #include "paddle.h"
+
+Paddle::Paddle(float x, float y) : GameObject{x, y} {
+
+}

@@ -3,8 +3,8 @@
 
 int main() {
 
-    constexpr size_t framesPerSecond{60};
-    constexpr size_t msPerFrame{1000 / framesPerSecond};
+    constexpr Uint32 framesPerSecond{60};
+    constexpr Uint32 msPerFrame{1000 / framesPerSecond};
     constexpr size_t screenWidth{1024};
     constexpr size_t screenHeight{768};
 

@@ -5,8 +5,13 @@
 #ifndef PONG_GAME_BALL_H
 #define PONG_GAME_BALL_H
 
+#include "gameObject.h"
 
-class ball {
+class Ball : public GameObject {
+
+public:
+    Ball(float x, float y);
+
 };
 
 

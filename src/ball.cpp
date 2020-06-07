@@ -3,3 +3,7 @@
 //
 
 #include "ball.h"
+
+Ball::Ball(float x, float y) : GameObject{x, y} {
+
+}

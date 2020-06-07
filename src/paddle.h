@@ -5,8 +5,12 @@
 #ifndef PONG_GAME_PADDLE_H
 #define PONG_GAME_PADDLE_H
 
+#include "gameObject.h"
 
-class paddle {
+class Paddle : public GameObject {
+public:
+    Paddle(float x, float y);
+    static constexpr int height{150};
 };
 
 
