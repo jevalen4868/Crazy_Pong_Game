@@ -5,6 +5,7 @@
 #ifndef PONG_GAME_GAME_H
 #define PONG_GAME_GAME_H
 
+#include <random>
 #include "SDL.h"
 #include "paddle.h"
 #include "ball.h"
@@ -17,9 +18,11 @@ public:
     void RunLoop();
 private:
     // Helper functions for the game loop
+    void InitializeBall();
     void ProcessInput(const float &deltaTime);
     void UpdateGame(const float &deltaTime);
     void GenerateOutput();
+    void UpdateWindowTitle(const int &fps);
 
     // Window created by SDL
     SDL_Window* _gameWindow;
@@ -27,6 +30,9 @@ private:
 
     Paddle _leftPaddle;
     Paddle _rightPaddle;
+    int _leftScore {0};
+    int _rightScore {0};
+    bool _playerScored{false};
     Ball _ball;
 
     // Game should continue to run
@@ -35,6 +41,12 @@ private:
     const size_t _screenHeight;
     const size_t _screenWidth;
 
+    // random number generator
+    std::random_device dev;
+    std::mt19937 engine;
+    std::uniform_int_distribution<int> _randomVel;
+    std::uniform_int_distribution<int> _randomVelIncrease;
+    std::uniform_int_distribution<int> _coinFlip;
 };
 
 

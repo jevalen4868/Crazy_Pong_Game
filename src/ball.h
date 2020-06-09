@@ -10,10 +10,10 @@
 class Ball : public GameObject {
 
 public:
-    Ball(float x, float y, float velX, float velY);
+    Ball(float x, float y);
 
 private:
-    float _velX, _velY;
+    float _velX{200.0f}, _velY{200.0f};
 
 public:
     void setVelX(float velX);

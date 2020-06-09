@@ -4,7 +4,7 @@
 
 #include "ball.h"
 
-Ball::Ball(float x, float y, float velX, float velY) : GameObject{x, y}, _velX{velX}, _velY{velY} {
+Ball::Ball(float x, float y) : GameObject{x, y} {
 
 }
 float Ball::getVelX() const {

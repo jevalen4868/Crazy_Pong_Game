@@ -4,12 +4,17 @@
 
 #include "game.h"
 #include <cmath>
+#include <iostream>
 
 Game::Game(const size_t screenWidth, const size_t screenHeight, const Uint32 msPerFrame)
     : _screenHeight{screenHeight}, _screenWidth{screenWidth}, _msPerFrame{msPerFrame},
       _leftPaddle(0, screenHeight / 2),
       _rightPaddle(screenWidth, screenHeight / 2),
-      _ball(screenWidth / 2, screenHeight / 2, -200.0f, 235.0f) {
+      engine(dev()),
+      _randomVel(200, 250),
+      _randomVelIncrease(0, 100),
+      _coinFlip(0, 1),
+      _ball(screenWidth / 2, screenHeight / 2) {
     int sdlResult{SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)};
     if (sdlResult != 0) {
         SDL_Log("Unable to init SDL: %s", SDL_GetError());
@@ -30,14 +35,31 @@ Game::Game(const size_t screenWidth, const size_t screenHeight, const Uint32 msP
     if (!_gameRenderer) {
         SDL_Log("Unable to create renderer: %s", SDL_GetError());
     }
+    InitializeBall();
+}
+
+void Game::InitializeBall() {
+    // Configure placement of ball.
+    int coinFlipX{_coinFlip(engine)}, coinFlipY{_coinFlip(engine)};
+    int velX{_randomVel(engine)}, velY{_randomVel(engine)};
+    // coin flip for pos or neg.
+    _ball.setX(_screenWidth / 2);
+    _ball.setY(_screenHeight / 2);
+    if(coinFlipX == 0) { velX *= -1; }
+    if(coinFlipY == 0) { velY *= -1; }
+    _ball.setVelX(velX);
+    _ball.setVelY(velY);
 }
 
 void Game::RunLoop() {
     Uint32 frameStart = SDL_GetTicks();
+    Uint32 frameEnd = SDL_GetTicks();
+    Uint32 refreshTitleTimestamp = SDL_GetTicks();
+    int fps {0};
     while (_running) {
 
         // ~60 fps
-        while (!SDL_TICKS_PASSED(SDL_GetTicks(), frameStart + this->_msPerFrame)) {
+        while (!SDL_TICKS_PASSED(SDL_GetTicks(), frameStart + _msPerFrame)) {
             SDL_Delay(1);
         };
 
@@ -50,7 +72,18 @@ void Game::RunLoop() {
 
         ProcessInput(deltaTime);
         UpdateGame(deltaTime);
+
+        // Refresh the title once a second.
+        if(frameEnd - refreshTitleTimestamp >= 1000) {
+            UpdateWindowTitle(fps);
+            fps = 0;
+            refreshTitleTimestamp = frameEnd;
+        }
+
         GenerateOutput();
+        fps++;
+
+        frameEnd = SDL_GetTicks();
     }
 }
 
@@ -67,6 +100,11 @@ void Game::ProcessInput(const float &deltaTime) {
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_ESCAPE]) {
         _running = false;
+    }
+    if(state[SDL_SCANCODE_RETURN] && _playerScored) {
+        // reset ball state.
+        _playerScored = false;
+        InitializeBall();
     }
 
     // Determine direction.
@@ -130,18 +168,31 @@ void Game::UpdateGame(const float &deltaTime) {
             _ball.getX() <= (GameObject::thickness * 2) && _ball.getX() >= GameObject::thickness &&
             // ball is moving left
             _ball.getVelX() < 0.0f) {
-        _ball.setVelX(_ball.getVelX() * -1.1f);
+        const float newVelXIncrease = -1.0f - (_randomVelIncrease(engine) / 1000.0f);
+        //SDL_Log("ball newVelXIncrease=%f", newVelXIncrease);
+        _ball.setVelX(_ball.getVelX() * newVelXIncrease);
     }
     else if (// our y-difference is small enough
             rightPaddleBallDiff <= Paddle::height / 2.0f &&
             _ball.getX() <= _screenWidth - GameObject::thickness && _ball.getX() >= _screenWidth - (GameObject::thickness * 2) &&
             // ball is moving right
             _ball.getVelX() > 0.0f) {
-        _ball.setVelX(_ball.getVelX() * -1.1f );
+        const float newVelXIncrease = -1.0f - (_randomVelIncrease(engine) / 1000.0f);
+        //SDL_Log("ball newVelXIncrease=%f", newVelXIncrease);
+        _ball.setVelX(_ball.getVelX() * newVelXIncrease );
     }
 
     _ball.setX(_ball.getX() + _ball.getVelX() * deltaTime);
     _ball.setY(_ball.getY() + _ball.getVelY() * deltaTime);
+
+    // Check if either side has scored
+    if(_ball.getX() < 0 && !_playerScored) {
+        _rightScore++;
+        _playerScored = true;
+    } else if (_ball.getX() > _screenWidth && !_playerScored) {
+        _leftScore++;
+        _playerScored = true;
+    }
 }
 
 void Game::GenerateOutput() {
@@ -193,4 +244,18 @@ Game::~Game() {
     SDL_DestroyRenderer(_gameRenderer);
     SDL_DestroyWindow(_gameWindow);
     SDL_Quit();
+}
+
+void Game::UpdateWindowTitle(const int &fps) {
+    std::string title;
+    if(_playerScored) {
+        title = "Game over! Hit enter to continue or ESC to quit. Player1: "
+                + std::to_string(_leftScore)
+                + " Player2: " + std::to_string(_rightScore);
+    } else {
+        title = "Crazy Pong FPS: " + std::to_string(fps)
+                + " Player1: " + std::to_string(_leftScore)
+                + " Player2: " + std::to_string(_rightScore);
+    }
+    SDL_SetWindowTitle(_gameWindow, title.c_str());
 }
