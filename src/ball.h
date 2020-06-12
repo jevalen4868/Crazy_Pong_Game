@@ -18,8 +18,7 @@ private:
 public:
     void setVelX(float velX);
     void setVelY(float velY);
-
-public:
+    void resetBall();
     float getVelX() const;
     float getVelY() const;
 };

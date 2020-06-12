@@ -5,6 +5,7 @@
 #include "game.h"
 #include <cmath>
 #include <iostream>
+#include <string>
 
 Game::Game(const size_t screenWidth, const size_t screenHeight, const Uint32 msPerFrame)
     : _screenHeight{screenHeight}, _screenWidth{screenWidth}, _msPerFrame{msPerFrame},

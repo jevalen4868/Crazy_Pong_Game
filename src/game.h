@@ -7,6 +7,7 @@
 
 #include <random>
 #include "SDL.h"
+#undef main
 #include "paddle.h"
 #include "ball.h"
 
