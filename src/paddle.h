@@ -12,7 +12,7 @@ public:
     Paddle(float x, float y);
     static constexpr int height{150};
 private:
-    int direction;
+    int direction{0};
 
 public:
     void setDirection(int direction);

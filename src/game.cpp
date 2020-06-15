@@ -7,10 +7,11 @@
 #include <iostream>
 #include <string>
 
-Game::Game(const size_t screenWidth, const size_t screenHeight, const Uint32 msPerFrame)
+Game::Game(const size_t screenWidth, const size_t screenHeight, const Uint32 msPerFrame,
+           shared_ptr<Paddle> &leftPaddle, shared_ptr<Paddle> &rightPaddle)
     : _screenHeight{screenHeight}, _screenWidth{screenWidth}, _msPerFrame{msPerFrame},
-      _leftPaddle(0, screenHeight / 2),
-      _rightPaddle(screenWidth, screenHeight / 2),
+      _leftPaddle{leftPaddle},
+      _rightPaddle{rightPaddle},
       engine(dev()),
       _randomVel(200, 250),
       _randomVelIncrease(0, 100),
@@ -59,7 +60,6 @@ void Game::RunLoop() {
     int fps {0};
     while (_running) {
 
-        // ~60 fps
         while (!SDL_TICKS_PASSED(SDL_GetTicks(), frameStart + _msPerFrame)) {
             SDL_Delay(1);
         };
@@ -108,7 +108,7 @@ void Game::ProcessInput(const float &deltaTime) {
         InitializeBall();
     }
 
-    // Determine direction.
+    /* Determine direction.
     _leftPaddle.setDirection(0);
     if (state[SDL_SCANCODE_W]) {
         _leftPaddle.setDirection(-1);
@@ -123,32 +123,32 @@ void Game::ProcessInput(const float &deltaTime) {
     }
     if (state[SDL_SCANCODE_DOWN]) {
         _rightPaddle.setDirection(1);
-    }
+    }*/
 }
 
 void Game::UpdateGame(const float &deltaTime) {
 
     // Now execute direction
-    if (_leftPaddle.getDirection() != 0) {
-        float newY = _leftPaddle.getY() + (_leftPaddle.getDirection() * 300.0f * deltaTime);
-        _leftPaddle.setY(newY);
+    if (_leftPaddle->getDirection() != 0) {
+        float newY = _leftPaddle->getY() + (_leftPaddle->getDirection() * 300.0f * deltaTime);
+        _leftPaddle->setY(newY);
         // Make sure the paddle doesn't move off screen.
-        if (_leftPaddle.getY() < (Paddle::height / 2.0f + GameObject::thickness)) {
-            _leftPaddle.setY(Paddle::height / 2.0f + GameObject::thickness);
-        } else if (_leftPaddle.getY() > (_screenHeight - Paddle::height / 2.0f - GameObject::thickness)) {
-            _leftPaddle.setY(_screenHeight - Paddle::height / 2.0f - GameObject::thickness);
+        if (_leftPaddle->getY() < (Paddle::height / 2.0f + GameObject::thickness)) {
+            _leftPaddle->setY(Paddle::height / 2.0f + GameObject::thickness);
+        } else if (_leftPaddle->getY() > (_screenHeight - Paddle::height / 2.0f - GameObject::thickness)) {
+            _leftPaddle->setY(_screenHeight - Paddle::height / 2.0f - GameObject::thickness);
         }
     }
 
     // Now execute direction
-    if (_rightPaddle.getDirection() != 0) {
-        float newY = _rightPaddle.getY() + (_rightPaddle.getDirection() * 300.0f * deltaTime);
-        _rightPaddle.setY(newY);
+    if (_rightPaddle->getDirection() != 0) {
+        float newY = _rightPaddle->getY() + (_rightPaddle->getDirection() * 300.0f * deltaTime);
+        _rightPaddle->setY(newY);
         // Make sure the paddle doesn't move off screen.
-        if (_rightPaddle.getY() < (Paddle::height / 2.0f + GameObject::thickness)) {
-            _rightPaddle.setY(Paddle::height / 2.0f + GameObject::thickness);
-        } else if (_rightPaddle.getY() > (_screenHeight - Paddle::height / 2.0f - GameObject::thickness)) {
-            _rightPaddle.setY(_screenHeight - Paddle::height / 2.0f - GameObject::thickness);
+        if (_rightPaddle->getY() < (Paddle::height / 2.0f + GameObject::thickness)) {
+            _rightPaddle->setY(Paddle::height / 2.0f + GameObject::thickness);
+        } else if (_rightPaddle->getY() > (_screenHeight - Paddle::height / 2.0f - GameObject::thickness)) {
+            _rightPaddle->setY(_screenHeight - Paddle::height / 2.0f - GameObject::thickness);
         }
     }
 
@@ -160,8 +160,8 @@ void Game::UpdateGame(const float &deltaTime) {
     }
 
     // Determine if paddle has hit the ball.
-    const float leftPaddleBallDiff = std::abs(_ball.getY() - _leftPaddle.getY());
-    const float rightPaddleBallDiff = std::abs(_ball.getY() - _rightPaddle.getY());
+    const float leftPaddleBallDiff = std::abs(_ball.getY() - _leftPaddle->getY());
+    const float rightPaddleBallDiff = std::abs(_ball.getY() - _rightPaddle->getY());
     //SDL_Log("ball parameters: leftPaddleBallDiff=%f,ballX=%f,ballY=%f", leftPaddleBallDiff, _ball.getX(), _ball.getY());
 
     if (// our y-difference is small enough
@@ -220,8 +220,8 @@ void Game::GenerateOutput() {
                         GameObject::thickness};
     SDL_RenderFillRect(_gameRenderer, &bottomWall);
 
-    SDL_Rect leftPaddle{static_cast<int>(_leftPaddle.getX() + GameObject::thickness),
-                        static_cast<int>(_leftPaddle.getY() - Paddle::height / 2),
+    SDL_Rect leftPaddle{static_cast<int>(_leftPaddle->getX() + GameObject::thickness),
+                        static_cast<int>(_leftPaddle->getY() - Paddle::height / 2),
                         GameObject::thickness,
                         Paddle::height};
     SDL_RenderFillRect(_gameRenderer, &leftPaddle);
@@ -232,8 +232,8 @@ void Game::GenerateOutput() {
                   GameObject::thickness};
     SDL_RenderFillRect(_gameRenderer, &ball);
 
-    SDL_Rect rightPaddle{static_cast<int>(_rightPaddle.getX() - GameObject::thickness * 2),
-                         static_cast<int>(_rightPaddle.getY() - Paddle::height / 2),
+    SDL_Rect rightPaddle{static_cast<int>(_rightPaddle->getX() - GameObject::thickness * 2),
+                         static_cast<int>(_rightPaddle->getY() - Paddle::height / 2),
                          GameObject::thickness,
                          Paddle::height};
     SDL_RenderFillRect(_gameRenderer, &rightPaddle);
@@ -259,4 +259,8 @@ void Game::UpdateWindowTitle(const int &fps) {
                 + " Player2: " + std::to_string(_rightScore);
     }
     SDL_SetWindowTitle(_gameWindow, title.c_str());
+}
+
+bool Game::IsRunning() {
+    return _running;
 }

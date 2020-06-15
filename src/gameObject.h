@@ -11,7 +11,7 @@ public:
     static constexpr int thickness{15};
 
 private:
-    float _x, _y;
+    float _x{0.0f}, _y{0.0f};
 
 public:
     void setX(float x);

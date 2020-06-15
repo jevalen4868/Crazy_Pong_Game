@@ -6,17 +6,22 @@
 #define PONG_GAME_GAME_H
 
 #include <random>
+#include <thread>
 #include "SDL.h"
 #undef main
 #include "paddle.h"
 #include "ball.h"
 
+using std::shared_ptr;
+
 class Game {
 public:
-    Game(const size_t screenWidth, const size_t screenHeight, const Uint32 msPerFrame);
+    Game(const size_t screenWidth, const size_t screenHeight, const Uint32 msPerFrame,
+        shared_ptr<Paddle> &leftPaddle, shared_ptr<Paddle> &rightPaddle);
     ~Game();
     // Runs the game loop until the game is over
     void RunLoop();
+    bool IsRunning();
 private:
     // Helper functions for the game loop
     void InitializeBall();
@@ -29,8 +34,8 @@ private:
     SDL_Window* _gameWindow;
     SDL_Renderer *_gameRenderer;
 
-    Paddle _leftPaddle;
-    Paddle _rightPaddle;
+    shared_ptr<Paddle> _leftPaddle;
+    shared_ptr<Paddle> _rightPaddle;
     int _leftScore {0};
     int _rightScore {0};
     bool _playerScored{false};
