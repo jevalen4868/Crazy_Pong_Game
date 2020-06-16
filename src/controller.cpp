@@ -33,12 +33,12 @@ void Controller::Control() {
 
         const Uint8 *state = SDL_GetKeyboardState(NULL);
         // Determine direction.
-        _paddlePtr->setDirection(0);
+        _paddlePtr->GetDirection(0);
         if (state[_upKey]) {
-            _paddlePtr->setDirection(-1);
+            _paddlePtr->GetDirection(-1);
         }
         if (state[_downKey]) {
-            _paddlePtr->setDirection(1);
+            _paddlePtr->GetDirection(1);
         }
 
         frameEnd = SDL_GetTicks();

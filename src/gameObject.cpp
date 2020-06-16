@@ -8,10 +8,10 @@ GameObject:: GameObject(float x, float y) :
 _x{x}, _y{y} {
 
 }
-float GameObject::getX() const {
+float GameObject::GetX() const {
     return _x;
 }
-float GameObject::getY() const {
+float GameObject::GetY() const {
     return _y;
 }
 void GameObject::setX(float x) {

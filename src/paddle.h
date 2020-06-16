@@ -11,14 +11,12 @@ class Paddle : public GameObject {
 public:
     Paddle(float x, float y);
     static constexpr int height{150};
+    void GetDirection(int direction);
+    int GetDirection() const;
+    void Move(const float &deltaTime);
+
 private:
     int direction{0};
-
-public:
-    void setDirection(int direction);
-
-public:
-    int getDirection() const;
 };
 
 

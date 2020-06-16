@@ -5,28 +5,33 @@
 #ifndef PONG_GAME_RENDERER_H
 #define PONG_GAME_RENDERER_H
 
+#include <thread>
+#include <string>
 #include "SDL.h"
 #include "paddle.h"
-#include "ball.h""
+#include "ball.h"
+#include "cfg.h"
+
+using std::thread;
+using std::shared_ptr;
+using std::make_shared;
+using std::unique_ptr;
 
 class Renderer {
 public:
-    Renderer(const size_t screenWidth, const size_t screenHeight, const Uint32 msPerFrame);
+    Renderer(const shared_ptr<Paddle> &leftPaddle, const shared_ptr<Paddle> &rightPaddle, const shared_ptr<Ball> &ball);
     ~Renderer();
-    void Render();
+    void Render() const;
+    void UpdateWindowTitle(const int &fps, const int &playerScored, const int &leftScore, const int &rightScore);
 
 private:
     // Window created by SDL
     SDL_Window *_gameWindow;
     SDL_Renderer *_gameRenderer;
 
-    Paddle _leftPaddle;
-    Paddle _rightPaddle;    
-    Ball _ball;
-
-    const Uint32 _msPerFrame;
-    const size_t _screenHeight;
-    const size_t _screenWidth;
+    const shared_ptr<Paddle> _leftPaddle;
+    const shared_ptr<Paddle> _rightPaddle;    
+    const shared_ptr<Ball> _ball;    
 };
 
 

@@ -11,48 +11,37 @@
 #undef main
 #include "paddle.h"
 #include "ball.h"
+#include "renderer.h"
+#include "cfg.h"
 
 using std::shared_ptr;
+using std::unique_ptr;
 
 class Game {
 public:
-    Game(const size_t screenWidth, const size_t screenHeight, const Uint32 msPerFrame,
-        shared_ptr<Paddle> &leftPaddle, shared_ptr<Paddle> &rightPaddle);
+    Game(shared_ptr<Paddle> &leftPaddle, shared_ptr<Paddle> &rightPaddle, shared_ptr<Ball> &ball,
+        Renderer &renderer);
     ~Game();
     // Runs the game loop until the game is over
     void RunLoop();
     bool IsRunning();
 private:
     // Helper functions for the game loop
-    void InitializeBall();
-    void ProcessInput(const float &deltaTime);
+    void ProcessInput();
     void UpdateGame(const float &deltaTime);
     void GenerateOutput();
-    void UpdateWindowTitle(const int &fps);
 
-    // Window created by SDL
-    SDL_Window* _gameWindow;
-    SDL_Renderer *_gameRenderer;
+    Renderer _renderer;
 
     shared_ptr<Paddle> _leftPaddle;
     shared_ptr<Paddle> _rightPaddle;
     int _leftScore {0};
     int _rightScore {0};
     bool _playerScored{false};
-    Ball _ball;
+    shared_ptr<Ball> _ball;
 
     // Game should continue to run
     bool _running {true};
-    const Uint32 _msPerFrame;
-    const size_t _screenHeight;
-    const size_t _screenWidth;
-
-    // random number generator
-    std::random_device dev;
-    std::mt19937 engine;
-    std::uniform_int_distribution<int> _randomVel;
-    std::uniform_int_distribution<int> _randomVelIncrease;
-    std::uniform_int_distribution<int> _coinFlip;
 };
 
 

@@ -5,22 +5,34 @@
 #ifndef PONG_GAME_BALL_H
 #define PONG_GAME_BALL_H
 
+#include <random>
+#include "paddle.h"
 #include "gameObject.h"
 
+using std::shared_ptr; 
+
 class Ball : public GameObject {
-
-public:
-    Ball(float x, float y);
-
 private:
     float _velX{200.0f}, _velY{200.0f};
 
+    shared_ptr<Paddle> _leftPaddle;
+    shared_ptr<Paddle> _rightPaddle;
+
+    // random number generator
+    std::random_device dev;
+    std::mt19937 engine;
+    std::uniform_int_distribution<int> _randomVel;
+    std::uniform_int_distribution<int> _randomVelIncrease;
+    std::uniform_int_distribution<int> _coinFlip;
+
 public:
-    void setVelX(float velX);
-    void setVelY(float velY);
-    void resetBall();
-    float getVelX() const;
-    float getVelY() const;
+    Ball(float x, float y, shared_ptr<Paddle> &leftPaddle, shared_ptr<Paddle> &rightPaddle);
+    void SetVelX(float velX);
+    void SetVelY(float velY);
+    void ResetBall();
+    float GetVelX() const;
+    float GetVelY() const;
+    void Move(const float &deltaTime);
 };
 
 

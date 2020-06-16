@@ -5,21 +5,20 @@
 #ifndef PONG_GAME_GAMEOBJECT_H
 #define PONG_GAME_GAMEOBJECT_H
 
-class GameObject {
-public:
-    GameObject(float x, float y);
-    static constexpr int thickness{15};
+#include "cfg.h"
 
+class GameObject {
 private:
     float _x{0.0f}, _y{0.0f};
 
 public:
+    GameObject(float x, float y);
+    static constexpr int thickness{15};
     void setX(float x);
     void setY(float y);
-
-public:
-    float getX() const;
-    float getY() const;
+    float GetX() const;
+    float GetY() const;
+    virtual void Move(const float &deltaTime) = 0;
 };
 
 
