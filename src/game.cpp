@@ -2,10 +2,6 @@
 // Created by jeremyvalenzuela on 6/4/20.
 //
 
-#include <cmath>
-#include <iostream>
-#include <string>
-#include <thread>
 #include "game.h"
 
 using std::thread;
@@ -19,6 +15,16 @@ Game::Game(shared_ptr<Paddle> &leftPaddle, shared_ptr<Paddle> &rightPaddle, shar
       _rightPaddle{rightPaddle},
       _ball{ball},
       _renderer{renderer} {   
+    FileOps fileOps = FileOps();
+    int *scores{fileOps.GetPreviousScore()};
+    if (scores != nullptr) {
+        _previousLeftScore = scores[0];
+        _previousRightScore = scores[1];
+    } else {
+        _previousLeftScore = 0;
+        _previousRightScore = 0;
+    }
+    delete scores;
     _ball->ResetBall();
 }
 
@@ -98,6 +104,11 @@ void Game::GenerateOutput() {
 }
 
 Game::~Game() {
+    FileOps fileOps = FileOps();
+    int scores[2];
+    scores[0] = _leftScore;
+    scores[1] = _rightScore;
+    fileOps.SaveScore(scores);
 }
 
 bool Game::IsRunning() {

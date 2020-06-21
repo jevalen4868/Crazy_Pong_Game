@@ -1,7 +1,10 @@
 #ifndef PONG_GAME_CONFIGURATION_H
 #define PONG_GAME_CONFIGURATION_H
 
+#include <string>
 #include "SDL.h"
+
+using std::string;
 
 class Cfg {
 public:

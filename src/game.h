@@ -7,12 +7,17 @@
 
 #include <random>
 #include <thread>
+#include <cmath>
+#include <iostream>
+#include <string>
+#include <filesystem>
 #include "SDL.h"
 #undef main
 #include "paddle.h"
 #include "ball.h"
 #include "renderer.h"
 #include "cfg.h"
+#include "fileOps.h"
 
 using std::shared_ptr;
 using std::unique_ptr;
@@ -36,7 +41,9 @@ private:
     shared_ptr<Paddle> _leftPaddle;
     shared_ptr<Paddle> _rightPaddle;
     int _leftScore {0};
+    int _previousLeftScore{0};
     int _rightScore {0};
+    int _previousRightScore{0};
     bool _playerScored{false};
     shared_ptr<Ball> _ball;
 
