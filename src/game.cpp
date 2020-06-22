@@ -87,7 +87,7 @@ void Game::ProcessInput() {
     if(state[SDL_SCANCODE_RETURN] && _playerScored) {
         // reset ball state.
         _playerScored = false;
-        _ball->ResetBall();
+        _ball->TogglePause();
     }
 }
 
@@ -100,9 +100,15 @@ void Game::UpdateGame(const float &deltaTime) {
     if (_ball->GetX() < 0 && !_playerScored) {
         _rightScore++;
         _playerScored = true;
+        _ball->ResetBall();
+        _ball->Move(deltaTime);
+        _ball->TogglePause();
     } else if (_ball->GetX() > Cfg::screenWidth && !_playerScored) {
         _leftScore++;
         _playerScored = true;
+        _ball->ResetBall();
+        _ball->Move(deltaTime);
+        _ball->TogglePause();
     }
 }
 

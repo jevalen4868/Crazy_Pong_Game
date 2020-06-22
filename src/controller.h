@@ -22,11 +22,13 @@ private:
     const Uint8 _upKey{0};
     // which key moves the paddle down.
     const Uint8 _downKey{0};
+    // the player name
+    string _playerName;
 
 public:
-    Controller(shared_ptr<Paddle> &paddlePtr, const Uint32 msPerFrame, Uint8 upKey, Uint8 downKey);
+    Controller(shared_ptr<Paddle> &paddlePtr, const Uint32 msPerFrame, Uint8 upKey, Uint8 downKey, const string playerName);
     // should be run in thread as it polls user input.
-    void Control();
+    string Control();
     // reflects the state of the controller loop.
     void IsRunning(bool running);
 };

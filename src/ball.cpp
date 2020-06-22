@@ -42,7 +42,14 @@ void Ball::ResetBall() {
     SetVelY(velY);
 }
 
+void Ball::TogglePause() {
+    _paused = !_paused;
+}
+
 void Ball::Move(const float &deltaTime) {
+    while (_paused) {
+        return;
+    }
     // These if's could be combined but this is relatively cleaner.
     if (GetY() <= GameObject::thickness && GetVelY() < 0.0f) {
         SetVelY(GetVelY() * -1);

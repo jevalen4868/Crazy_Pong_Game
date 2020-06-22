@@ -6,6 +6,7 @@
 #define PONG_GAME_BALL_H
 
 #include <random>
+#include <future>
 #include "paddle.h"
 #include "gameObject.h"
 
@@ -19,6 +20,9 @@ private:
     // reference to paddles the ball will bounce off of.
     shared_ptr<Paddle> _leftPaddle;
     shared_ptr<Paddle> _rightPaddle;
+
+    // used for maintaining pause. returns state when done.
+    bool _paused{false};
 
     // random number generator classes
     std::random_device dev;
@@ -39,6 +43,8 @@ public:
     float GetVelX() const;
     // retrieve the x velocity of the ball.
     float GetVelY() const;
+    // used to pause the ball movement
+    void TogglePause();
     void Move(const float &deltaTime) override;
 };
 

@@ -6,11 +6,11 @@
 #include "controller.h"
 
 Controller::Controller(shared_ptr<Paddle> &paddlePtr, const Uint32 msPerFrame,
-    Uint8 upKey, Uint8 downKey) 
-    : _paddlePtr{paddlePtr}, _msPerFrame{msPerFrame}, _upKey{upKey}, _downKey{downKey} {
+    Uint8 upKey, Uint8 downKey, const string playerName) 
+    : _paddlePtr{paddlePtr}, _msPerFrame{msPerFrame}, _upKey{upKey}, _downKey{downKey}, _playerName{playerName} {
 }
 
-void Controller::Control() {
+string Controller::Control() {
     Uint32 frameStart = SDL_GetTicks();
     Uint32 frameEnd = SDL_GetTicks();
     while (_running) {
@@ -45,6 +45,7 @@ void Controller::Control() {
 
         //SDL_Log("_paddlePtr Direction=%i", _paddlePtr->getDirection());
     }
+    return _playerName;
 }
 
 void Controller::IsRunning(bool running) {
