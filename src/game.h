@@ -20,7 +20,6 @@
 #include "fileOps.h"
 
 using std::shared_ptr;
-using std::unique_ptr;
 
 class Game {
 public:

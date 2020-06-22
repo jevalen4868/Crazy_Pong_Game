@@ -4,7 +4,8 @@
 
 #include "consoleLogger.h"
 
-ConsoleLogger::ConsoleLogger(shared_ptr<MessageQueue<string>> &messageQueue) : _messageQueue{messageQueue} {
+ConsoleLogger::ConsoleLogger() : _messageQueue{make_unique<MessageQueue<string>>()} {
+    
 }
 
 void ConsoleLogger::Run() {

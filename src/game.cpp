@@ -4,11 +4,6 @@
 
 #include "game.h"
 
-using std::thread;
-using std::shared_ptr;
-using std::make_shared;
-using std::unique_ptr;
-
 Game::Game(shared_ptr<Paddle> &leftPaddle, shared_ptr<Paddle> &rightPaddle, shared_ptr<Ball> &ball,
     Renderer &renderer)
     : _leftPaddle{leftPaddle},

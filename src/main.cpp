@@ -4,7 +4,6 @@
 #include "game.h"
 #include "controller.h"
 #include "renderer.h"
-#include "messageQueue.h"
 #include "consoleLogger.h"
 
 using std::thread;
@@ -15,8 +14,7 @@ using std::unique_ptr;
 
 int main() {
     // create paddles, attach to controllers.
-    shared_ptr<MessageQueue<string>> messageQueue = make_shared<MessageQueue<string>>();
-    shared_ptr<ConsoleLogger> consoleLogger = make_shared<ConsoleLogger>(messageQueue);
+    shared_ptr<ConsoleLogger> consoleLogger = make_shared<ConsoleLogger>();
     thread consoleLoggerThread = thread(&ConsoleLogger::Run, consoleLogger);
 
     consoleLogger->Log("APP STARTED");

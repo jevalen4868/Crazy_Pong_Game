@@ -11,17 +11,23 @@
 #include "messageQueue.h"
 #include "messageQueue.cpp"
 
-using std::shared_ptr;
+using std::unique_ptr;
+using std::make_unique;
 using std::string;
 
 class ConsoleLogger {
 public:
-    ConsoleLogger(shared_ptr<MessageQueue<string>> &messageQueue);
+    ConsoleLogger();
+    // run the loop which constantly checks for messages to print.
     void Run();
+    // send the message you wish to log.
     void Log(string logMessage);
+    // used to keep track of running loop.
     void IsRunning(bool running);
 private:
-    shared_ptr<MessageQueue<string>> _messageQueue;
+    // ptr to message queue for incoming and outgoing messages.
+    unique_ptr<MessageQueue<string>> _messageQueue;
+    // keeps track of whether loop should continue.
     bool _running{true};
 };
 
