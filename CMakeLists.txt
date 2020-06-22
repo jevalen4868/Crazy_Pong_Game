@@ -15,7 +15,8 @@ find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS} src)
 
 add_executable(Pong_Game src/main.cpp src/controller.cpp src/controller.h src/game.cpp src/game.h src/renderer.cpp src/renderer.h src/paddle.cpp src/paddle.h src/ball.cpp src/ball.h src/gameObject.cpp src/gameObject.h src/cfg.h src/fileOps.cpp src/fileOps.h src/messageQueue.cpp src/messageQueue.h src/consoleLogger.cpp src/consoleLogger.h)
-if(CMAKE_HOST_UNIX) 
-	string(STRIP ${SDL2_LIBRARIES} SDL2_LIBRARIES)
-endif()
+# This actually broke my linux build when I ported it over. When I advance from cmake novice I will fix this.
+#if(CMAKE_HOST_UNIX) 
+	#string(STRIP ${SDL2_LIBRARIES} SDL2_LIBRARIES)
+#endif()
 target_link_libraries(Pong_Game ${SDL2_LIBRARIES})

@@ -1,5 +1,11 @@
 # Welcome to Pong_Game
 
+# Please enjoy with a friend!
+* W is up and S is down for the left player.
+* ARROW KEY UP is up and ARROW KEY DOWN is down for the right player.
+* ESC will quit the game and ENTER will resume once a player has scored.
+* The score is kept at the window title.
+
 # IDE?
 For windows, I recommend using visual studio, please see "To build for windows" section.
 For linux, any editor would likely do.
