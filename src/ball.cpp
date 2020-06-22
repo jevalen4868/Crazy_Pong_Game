@@ -34,8 +34,8 @@ void Ball::ResetBall() {
     int coinFlipX{_coinFlip(engine)}, coinFlipY{_coinFlip(engine)};
     int velX{_randomVel(engine)}, velY{_randomVel(engine)};
     // coin flip for pos or neg.
-    setX(Cfg::screenWidth / 2);
-    setY(Cfg::screenHeight / 2);
+    SetX(Cfg::screenWidth / 2);
+    SetY(Cfg::screenHeight / 2);
     if (coinFlipX == 0) { velX *= -1; }
     if (coinFlipY == 0) { velY *= -1; }
     SetVelX(velX);
@@ -73,6 +73,6 @@ void Ball::Move(const float &deltaTime) {
         SetVelX(GetVelX() * newVelXIncrease);
     }
 
-    setX(GetX() + GetVelX() * deltaTime);
-    setY(GetY() + GetVelY() * deltaTime);
+    SetX(GetX() + GetVelX() * deltaTime);
+    SetY(GetY() + GetVelY() * deltaTime);
 }

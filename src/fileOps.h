@@ -22,9 +22,12 @@ class FileOps {
 public:
     FileOps();
     ~FileOps();
+    // retrieves the previous score of the app from the existing file.
     int *GetPreviousScore();
+    // saves 2 scores passed to file.
     void SaveScore(const int *scores);
 private:
+    // name of the game data file written to.
     string _gameDataFile{};
 };
 

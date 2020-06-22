@@ -14,9 +14,9 @@ float GameObject::GetX() const {
 float GameObject::GetY() const {
     return _y;
 }
-void GameObject::setX(float x) {
+void GameObject::SetX(float x) {
     _x = x;
 }
-void GameObject::setY(float y) {
+void GameObject::SetY(float y) {
     _y = y;
 }

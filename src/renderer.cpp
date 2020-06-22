@@ -75,13 +75,8 @@ void Renderer::Render() const {
     SDL_RenderPresent(_gameRenderer);
 }
 
-void Renderer::UpdateWindowTitle(const int &fps, const int &playerScored, const int &leftScore, const int &rightScore) {
-    std::string title;
-    if (playerScored) {
-        title = "Game over! Hit enter to continue or ESC to quit. Player1: " + std::to_string(leftScore) + " Player2: " + std::to_string(rightScore);
-    } else {
-        title = "Crazy Pong FPS: " + std::to_string(fps) + " Player1: " + std::to_string(leftScore) + " Player2: " + std::to_string(rightScore);
-    }
+void Renderer::UpdateWindowTitle(const string &title) {
+
     SDL_SetWindowTitle(_gameWindow, title.c_str());
 }
 

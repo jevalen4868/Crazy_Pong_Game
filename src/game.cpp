@@ -51,7 +51,14 @@ void Game::RunLoop() {
 
         // Refresh the title once a second.
         if(frameEnd - refreshTitleTimestamp >= 1000) {
-            _renderer.UpdateWindowTitle(fps, _playerScored, _leftScore, _rightScore);
+            std::string title;
+            if (_playerScored) {
+                title = "Game over! Hit enter to continue or ESC to quit. Player1: " + std::to_string(_leftScore) 
+                    + " Player2: " + std::to_string(_rightScore);
+            } else {
+                title = "Crazy Pong FPS: " + std::to_string(fps) + " Player1: " + std::to_string(_leftScore) + " Player2: " + std::to_string(_rightScore);
+            }
+            _renderer.UpdateWindowTitle(title);
             fps = 0;
             refreshTitleTimestamp = frameEnd;
         }

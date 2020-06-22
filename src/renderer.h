@@ -22,7 +22,7 @@ public:
     Renderer(const shared_ptr<Paddle> &leftPaddle, const shared_ptr<Paddle> &rightPaddle, const shared_ptr<Ball> &ball);
     ~Renderer();
     void Render() const;
-    void UpdateWindowTitle(const int &fps, const int &playerScored, const int &leftScore, const int &rightScore);
+    void UpdateWindowTitle(const string &title);
 
 private:
     // Window created by SDL

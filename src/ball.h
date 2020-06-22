@@ -13,12 +13,14 @@ using std::shared_ptr;
 
 class Ball : public GameObject {
 private:
+    // velocity of ball in x and y direction.
     float _velX{200.0f}, _velY{200.0f};
 
+    // reference to paddles the ball will bounce off of.
     shared_ptr<Paddle> _leftPaddle;
     shared_ptr<Paddle> _rightPaddle;
 
-    // random number generator
+    // random number generator classes
     std::random_device dev;
     std::mt19937 engine;
     std::uniform_int_distribution<int> _randomVel;
@@ -27,12 +29,17 @@ private:
 
 public:
     Ball(float x, float y, shared_ptr<Paddle> &leftPaddle, shared_ptr<Paddle> &rightPaddle);
+    // set velocity of ball in x
     void SetVelX(float velX);
+    // set velocity of ball in y
     void SetVelY(float velY);
+    // reset the ball to the center of the window.
     void ResetBall();
+    // retrieve the x velocity of the ball.
     float GetVelX() const;
+    // retrieve the x velocity of the ball.
     float GetVelY() const;
-    void Move(const float &deltaTime);
+    void Move(const float &deltaTime) override;
 };
 
 
