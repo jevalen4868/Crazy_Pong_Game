@@ -14,7 +14,7 @@ public:
     MessageQueue();
     T Receive();
     void Send(T &&t);
-
+    bool IsEmpty();
 private:
     std::mutex _mutex;
     std::condition_variable _cond;

@@ -26,7 +26,12 @@ void MessageQueue<T>::Send(T &&t) {
     // perform vector modification under the lock
     std::lock_guard<std::mutex> uLock(_mutex);
 
-    // add vector to queue
+    // add vector to queue    
     _messages.push_back(std::move(t));
     _cond.notify_one();// notify client after pushing new Vehicle into vector
+}
+
+template<class T>
+bool MessageQueue<T>::IsEmpty() {
+    return _messages.empty();
 }

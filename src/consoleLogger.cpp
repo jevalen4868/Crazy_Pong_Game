@@ -8,7 +8,7 @@ ConsoleLogger::ConsoleLogger(shared_ptr<MessageQueue<string>> &messageQueue) : _
 }
 
 void ConsoleLogger::Run() {
-    while (_running) {
+    while (_running || !_messageQueue->IsEmpty()) {
         std::cout << _messageQueue->Receive() << std::endl;
     }
 }
