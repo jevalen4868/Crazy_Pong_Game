@@ -4,7 +4,7 @@
 
 #include "renderer.h"
 
-Renderer::Renderer(const shared_ptr<Paddle> &leftPaddle, const shared_ptr<Paddle> &rightPaddle, const shared_ptr<Ball> &ball) 
+Renderer::Renderer(const shared_ptr<Paddle> &leftPaddle, const shared_ptr<Paddle> &rightPaddle, const shared_ptr<Ball> &ball)
 	: _leftPaddle{leftPaddle},
       _rightPaddle{rightPaddle},
       _ball(ball) {

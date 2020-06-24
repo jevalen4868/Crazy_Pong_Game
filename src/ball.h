@@ -45,6 +45,7 @@ public:
     float GetVelY() const;
     // used to pause the ball movement
     void TogglePause();
+    void TogglePause(const bool newValue);
     void Move(const float &deltaTime) override;
 };
 

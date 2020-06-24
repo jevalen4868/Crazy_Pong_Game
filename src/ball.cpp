@@ -46,6 +46,10 @@ void Ball::TogglePause() {
     _paused = !_paused;
 }
 
+void Ball::TogglePause(const bool newValue) {
+    _paused = newValue;
+}
+
 void Ball::Move(const float &deltaTime) {
     while (_paused) {
         return;
